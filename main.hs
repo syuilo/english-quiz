@@ -9,7 +9,7 @@ wordsx = [("eat", "食べる"), ("make", "作る"), ("take", "取る"), ("rain",
 
 main = do
   question
-  putStrLn $ "\n----------"
+  putStrLn "\n----------"
   main -- ループさせる
 
 question = do
