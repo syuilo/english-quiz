@@ -1,7 +1,7 @@
 import System.Random
 
--- いくつ(ダミーの)選択肢を表示するか
-choicesCount = 2
+-- いくつ選択肢を表示するか
+choicesCount = 3
 
 -- 辞書
 wordsx :: [(String, String)]
@@ -13,16 +13,15 @@ main = do
   main -- ループさせる
 
 question = do
-  -- お題取得
-  wordx <- getRandomWord
-
   -- 選択肢取得
-  dummyChoices <- sequence (replicate choicesCount getRandomWord)
-  let choices = [wordx] ++ dummyChoices
+  choices <- sequence (replicate choicesCount getRandomWord)
+
+  -- 正解を決定
+  a <- getStdRandom (randomR (0, choicesCount - 1)) :: IO Int
 
   -- 問題を表示
-  putStrLn $ fst wordx
-  putStrLn $ unlines (map (\i -> show (i + 1) ++ ". " ++ snd (choices !! i)) [0 .. choicesCount])
+  putStrLn $ fst (choices !! a)
+  putStrLn $ unlines (map (\i -> show (i + 1) ++ ". " ++ snd (choices !! i)) [0 .. (choicesCount - 1)])
 
   -- ユーザーの答え
   key <- getLine
@@ -30,7 +29,7 @@ question = do
   let choice = (read key) - 1
 
   -- 合っているか
-  putStrLn $ if (choices !! choice) == wordx then "Nice job!" else "Wrong answer!"
+  putStrLn $ if choice == a then "Nice job!" else "Wrong answer!"
 
 -- ランダムな単語を取得
 getRandomWord :: IO (String, String)
